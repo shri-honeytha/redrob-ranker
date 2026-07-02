@@ -42,7 +42,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-theme = st.sidebar.radio("Theme", ["Light", "Dark"], horizontal=True)
+theme = st.radio("Theme", ["Light", "Dark"], horizontal=True)
 
 if theme == "Dark":
     st.markdown("""
