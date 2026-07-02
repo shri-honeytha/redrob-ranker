@@ -1,0 +1,75 @@
+# submission_metadata.yaml
+# Complete this file before submitting to the portal.
+# Fields marked [FILL IN] require your team's actual information.
+# Fields marked [AUTO] are pre-filled from the system and don't need changes.
+
+team_name: "[FILL IN — your registered team name]"
+
+primary_contact:
+  name: "[FILL IN]"
+  email: "[FILL IN]"
+  phone: "[FILL IN]"
+
+team_members:
+  - name: "[FILL IN]"
+    email: "[FILL IN]"
+  # add more members as needed
+
+github_repo: "https://github.com/[FILL IN YOUR USERNAME]/[FILL IN YOUR REPO NAME]"
+
+sandbox_link: "[FILL IN — HF Spaces / Colab / Streamlit / Replit / Docker link]"
+
+reproduce_command: "python rank.py --candidates data/candidates.jsonl --out submission.csv"
+
+compute_environment:
+  summary: "[FILL IN — e.g. 'MacBook Pro M2, 16 GB RAM, Python 3.11, macOS 14.0']"
+  os: "[FILL IN]"
+  python_version: "[FILL IN]"
+  cpu: "[FILL IN]"
+  ram_gb: "[FILL IN]"
+  gpu: "none"
+
+ai_tools_used:
+  - "Claude"
+  # add any other tools: ChatGPT, Copilot, Cursor, Gemini, etc.
+
+ai_usage_summary: >
+  Claude (Anthropic) was used as an AI engineering collaborator throughout the project:
+  architecture review, code generation, calibration scripts, and documentation.
+  Claude touched code and architecture only — no raw candidate data was fed to any
+  hosted AI API at any point in the pipeline (neither during development nor at
+  ranking time). All inference is local: feature extraction runs in pure Python/pandas,
+  embeddings use a locally-fitted TF-IDF+SVD model (or a locally-cached sentence-
+  transformers checkpoint for the optional BGE backend). The design decisions,
+  labeling rationale, and ablation choices are our own and are documented in
+  docs/HANDOVER.md for the Stage 5 interview.
+
+methodology_summary: >
+  Our system combines structured feature engineering with semantic similarity to rank
+  candidates the way a great recruiter would — not by keyword count, but by
+  understanding who actually fits. Offline: we extract 15 engineered features per
+  candidate: career coherence (title relevance, trajectory slope, product-vs-consulting
+  ratio), 5 JD must-have coverage scores checked in both structured skills AND
+  free-text descriptions, Eightfold-inspired recency-weighted skill overlap
+  (ever-used vs. currently-using), a concept graph for latent skill inference, and a
+  reachability composite (last-active + response rate + open-to-work flag, explicitly
+  named in the JD). Candidate text is embedded via TF-IDF + SVD (network-free; BGE-
+  small also supported). Online (< 30s): we embed the JD identically, run cosine-
+  similarity as a single matrix multiply, apply gate caps (non-technical titles,
+  consulting-only careers, honeypot profiles — calibrated against the full 100K pool),
+  combine features by weighted sum, apply the behavioral multiplier last, and take the
+  top 100. Every component is traceable to a named feature. Reasoning strings are
+  populated from actual extracted profile fields only.
+
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true
+  no_candidate_data_fed_to_hosted_api: true
+
+# Pre-computation note (per submission_spec.md Section 3):
+# The offline precompute steps (scripts/02_build_features.py and
+# scripts/03_build_embeddings.py) may each take > 5 minutes on a slow machine.
+# This is explicitly permitted by the spec. The ONLINE ranking step
+# (rank.py) completes in < 30 seconds on a 1-CPU, 4GB machine.

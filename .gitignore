@@ -1,0 +1,53 @@
+data/candidates_sample.jsonl
+__pycache__/
+*.pyc
+
+# --- Raw / large data (never commit) ---
+
+
+# --- Old / superseded code ---
+src/*_v1_backup.py
+src/*_backup.py
+
+# --- Internal exploration/debug output (not part of the deliverable) ---
+docs/exploration_output.txt
+docs/exploration_timing.txt
+
+# --- Pre-computed artifacts (regenerable via scripts/02 and 03) ---
+# Uncomment to keep the repo lean; leave commented if you'd rather ship
+# pre-built artifacts so graders don't have to rerun the offline step.
+# artifacts/
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# --- Virtual environments ---
+venv/
+.venv/
+env/
+ENV/
+
+# --- Environment / secrets ---
+.env
+.env.*
+
+# --- Streamlit ---
+.streamlit/secrets.toml
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+
+# --- Editor/IDE ---
+.vscode/
+.idea/
+*.swp
+
+# --- Jupyter ---
+.ipynb_checkpoints/
